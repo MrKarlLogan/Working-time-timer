@@ -57,7 +57,10 @@ const updateProgressValue = (
 };
 
 const utilsTimer = {
-	updateProgress: (workedTimeMinutes: number) => {
+	updateProgress: (
+		workedTimeMinutes: number,
+		shouldIncrement: boolean = true
+	) => {
 		const currentHours = new Date().getHours();
 
 		if (
@@ -65,7 +68,7 @@ const utilsTimer = {
 			currentHours >= Number(firstHoursInput.value) &&
 			currentHours <= Number(lastHoursInput.value)
 		) {
-			++minutesWorked;
+			if (shouldIncrement) ++minutesWorked;
 			updateProgressValue(minutesWorked, workedTimeMinutes);
 		}
 
@@ -91,7 +94,7 @@ const startProgressTimer = ({
 	const currentSecond = (60 - new Date().getSeconds()) * 1000;
 
 	syncTimeout = setTimeout(() => {
-		utilsTimer.updateProgress(workedTimeMinutes);
+		utilsTimer.updateProgress(workedTimeMinutes, false);
 
 		progressTimer = setInterval(() => {
 			utilsTimer.updateProgress(workedTimeMinutes);
