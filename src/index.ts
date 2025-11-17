@@ -1,5 +1,9 @@
 import diffValue from './module/diffValue';
 import interfaceIsDisabled from './module/interfaceIsDisabled';
+import {
+	startProgressTimer,
+	stopProgressTimer,
+} from './module/progressTimerUtils';
 import startTimer from './module/startTimer';
 import stopTimer from './module/stopTimer';
 import updateDate from './module/updateDate';
@@ -36,81 +40,7 @@ let minutesWorked = 0;
 let progressTimer: NodeJS.Timeout | null = null;
 let syncTimeout: NodeJS.Timeout | null = null;
 
-const clearProgressTimer = () => {
-	if (progressTimer) {
-		clearInterval(progressTimer);
-		progressTimer = null;
-	}
-	if (syncTimeout) {
-		clearTimeout(syncTimeout);
-		syncTimeout = null;
-	}
-};
-
-const updateProgressValue = (
-	minutesWorked: number,
-	workedTimeMinutes: number
-) => {
-	const result = (minutesWorked / workedTimeMinutes) * 100;
-	progress.value = result;
-	startButton.textContent = `${result.toFixed(2)}%`;
-};
-
-const utilsTimer = {
-	updateProgress: (
-		workedTimeMinutes: number,
-		shouldIncrement: boolean = true
-	) => {
-		const currentHours = new Date().getHours();
-
-		if (
-			minutesWorked !== workedTimeMinutes &&
-			currentHours >= Number(firstHoursInput.value) &&
-			currentHours <= Number(lastHoursInput.value)
-		) {
-			if (shouldIncrement) ++minutesWorked;
-			updateProgressValue(minutesWorked, workedTimeMinutes);
-		}
-
-		if (minutesWorked >= workedTimeMinutes) {
-			clearProgressTimer();
-			return;
-		}
-	},
-};
-
-const startProgressTimer = ({
-	workedTimeMinutes,
-	passedMinutes,
-}: {
-	workedTimeMinutes: number;
-	passedMinutes: number;
-}) => {
-	clearProgressTimer();
-
-	if (passedMinutes > 0) minutesWorked = passedMinutes;
-	updateProgressValue(minutesWorked, workedTimeMinutes);
-
-	const currentSecond = (60 - new Date().getSeconds()) * 1000;
-
-	syncTimeout = setTimeout(() => {
-		utilsTimer.updateProgress(workedTimeMinutes, false);
-
-		progressTimer = setInterval(() => {
-			utilsTimer.updateProgress(workedTimeMinutes);
-		}, 60000);
-	}, currentSecond);
-};
-
-const stopProgressTimer = () => {
-	clearProgressTimer();
-	minutesWorked = 0;
-	progress.value = 0;
-	startButton.textContent = 'Start a work shift';
-};
-
 const getDateToLocalStorage = () => {
-	const currentDate = new Date().toISOString().split('T')[0];
 	const lastDateToLocalStorage = localStorage.getItem('localDate');
 	if (lastDateToLocalStorage) {
 		const {
@@ -138,7 +68,18 @@ const getDateToLocalStorage = () => {
 				firstHour: currentValue.firstHour,
 				lastHour: currentValue.lastHour,
 			});
-			startProgressTimer(wordDaysDate);
+			startProgressTimer({
+				workedTimeMinutes: wordDaysDate.workedTimeMinutes,
+				passedMinutes: wordDaysDate.passedMinutes,
+				progressTimer,
+				syncTimeout,
+				minutesWorked,
+				progress,
+				startButton,
+				firstHoursInput,
+				lastHoursInput,
+				fisrtDateInput,
+			});
 		}
 		interfaceIsDisabled({
 			isBlock: true,
@@ -154,12 +95,22 @@ const getDateToLocalStorage = () => {
 
 startButton.addEventListener('click', (e) => {
 	e.preventDefault();
+
+	stopProgressTimer({
+		progressTimer,
+		syncTimeout,
+		minutesWorked,
+		progress,
+		startButton,
+	});
+
 	const currentValue = startTimer({
 		fisrtDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
 	});
+
 	if (currentValue) {
 		const wordDaysDate = diffValue({
 			firstDate: currentValue.firstDate,
@@ -167,7 +118,18 @@ startButton.addEventListener('click', (e) => {
 			firstHour: currentValue.firstHour,
 			lastHour: currentValue.lastHour,
 		});
-		startProgressTimer(wordDaysDate);
+		startProgressTimer({
+			workedTimeMinutes: wordDaysDate.workedTimeMinutes,
+			passedMinutes: wordDaysDate.passedMinutes,
+			progressTimer,
+			syncTimeout,
+			minutesWorked,
+			progress,
+			startButton,
+			firstHoursInput,
+			lastHoursInput,
+			fisrtDateInput,
+		});
 	}
 	interfaceIsDisabled({
 		isBlock: true,
@@ -182,7 +144,17 @@ startButton.addEventListener('click', (e) => {
 
 resetButton.addEventListener('click', (e) => {
 	e.preventDefault();
+
+	stopProgressTimer({
+		progressTimer,
+		syncTimeout,
+		minutesWorked,
+		progress,
+		startButton,
+	});
+
 	stopTimer({ fisrtDateInput, lastDateInput, firstHoursInput, lastHoursInput });
+
 	interfaceIsDisabled({
 		isBlock: false,
 		fisrtDateInput,
@@ -192,7 +164,6 @@ resetButton.addEventListener('click', (e) => {
 		startButton,
 		resetButton,
 	});
-	stopProgressTimer();
 });
 
 fisrtDateInput.addEventListener('input', () => {
@@ -232,6 +203,9 @@ lastHoursInput.addEventListener('input', () => {
 });
 
 const initApp = () => {
+	minutesWorked = 0;
+	progressTimer = null;
+	syncTimeout = null;
 	startButton.disabled = true;
 	resetButton.disabled = true;
 	updateDate({ dateInput, timeInput });

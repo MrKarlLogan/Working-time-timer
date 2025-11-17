@@ -1,13 +1,4 @@
-type validateDateType = {
-	fisrtDateInput: HTMLInputElement;
-	lastDateInput: HTMLInputElement;
-	firstLocalDate?: string | null;
-	lastLocalDate?: string | null;
-	firstHoursInput: HTMLInputElement;
-	lastHoursInput: HTMLInputElement;
-	firstLocalHours?: string | null;
-	lastLocalHours?: string | null;
-};
+import { validateDateType } from '../types/interface';
 
 const validateDate = ({
 	fisrtDateInput,

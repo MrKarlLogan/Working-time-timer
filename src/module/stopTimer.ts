@@ -1,9 +1,4 @@
-type stopTimerType = {
-	fisrtDateInput: HTMLInputElement;
-	lastDateInput: HTMLInputElement;
-	firstHoursInput: HTMLInputElement;
-	lastHoursInput: HTMLInputElement;
-};
+import { stopTimerType } from '../types/timer';
 
 const stopTimer = ({
 	fisrtDateInput,

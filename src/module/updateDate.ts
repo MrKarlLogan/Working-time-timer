@@ -1,7 +1,4 @@
-type updateDateType = {
-	dateInput: HTMLParagraphElement;
-	timeInput: HTMLParagraphElement;
-};
+import { updateDateType } from '../types/interface';
 
 const updateDate = ({ dateInput, timeInput }: updateDateType) => {
 	const date = new Date();

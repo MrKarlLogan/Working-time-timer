@@ -1,11 +1,6 @@
-type diffValueType = {
-	firstDate: string;
-	lastDate: string;
-	firstHour: string;
-	lastHour: string;
-};
+import { diffValueType } from '../types/diff';
 
-const timeUtils = {
+export const timeUtils = {
 	diffDays: (lastDate: string, firstDate: string) => {
 		return (
 			Math.floor(
@@ -17,6 +12,12 @@ const timeUtils = {
 	daysPassed: (firstDate: string) => {
 		return Math.floor(
 			(new Date().getTime() - new Date(firstDate).getTime()) /
+				(1000 * 60 * 60 * 24)
+		);
+	},
+	daysUntilStart: (firstDate: string) => {
+		return Math.floor(
+			(new Date(firstDate).getTime() - new Date().getTime()) /
 				(1000 * 60 * 60 * 24)
 		);
 	},

@@ -1,15 +1,5 @@
+import { startTimerType } from '../types/timer';
 import validateDate from './validateDate';
-
-type startTimerType = {
-	fisrtDateInput: HTMLInputElement;
-	lastDateInput: HTMLInputElement;
-	dateToLocaleFirstDate?: string | null;
-	dateToLocaleLastDate?: string | null;
-	firstHoursInput: HTMLInputElement;
-	lastHoursInput: HTMLInputElement;
-	dateToLocaleFirstHours?: string | null;
-	dateToLocaleLastHours?: string | null;
-};
 
 const startTimer = ({
 	fisrtDateInput,
