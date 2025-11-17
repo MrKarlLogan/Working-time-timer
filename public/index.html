@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <title>Working time timer</title>
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="header__title">How much time is left?</h1>
+  </header>
+  <main class="main">
+    <article class="section__current-time">
+      <form class="form" name="work-shift">
+        <input class="form__first-date" type="date" name="first-date" />
+        <input class="form__last-date" type="date" name="last-date" />
+        <input class="form__first-hour" type="number" name="first-hour" min="0" max="24" value="0" />
+        <input class="form__last-hour" type="number" name="last-hour" min="0" max="24" value="0" />
+        <button class="form__button-start">Start a work shift</button>
+      </form>
+      <article class="current-time">
+        <button class="current-time__button-reset">Reset</button>
+        <div class="current-time__box">
+          <p class="current-time__box_date">Loading...</p>
+          <p class="current-time__box_time">Loading...</p>
+        </div>
+      </article>
+      <progress class="progress" value="0" max="100" />
+    </article>
+  </main>
+</body>
+
+</html>

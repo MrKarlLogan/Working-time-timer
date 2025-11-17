@@ -1,0 +1,37 @@
+type interfaceIsDisabledType = {
+  isBlock: boolean;
+  fisrtDateInput: HTMLInputElement;
+  lastDateInput: HTMLInputElement;
+  firstHoursInput: HTMLInputElement;
+  lastHoursInput: HTMLInputElement;
+  startButton: HTMLButtonElement;
+  resetButton: HTMLButtonElement;
+};
+
+const interfaceIsDisabled = ({
+  isBlock,
+  fisrtDateInput,
+  lastDateInput,
+  firstHoursInput,
+  lastHoursInput,
+  startButton,
+  resetButton,
+}: interfaceIsDisabledType) => {
+  if (isBlock) {
+    fisrtDateInput.disabled = true;
+    lastDateInput.disabled = true;
+    firstHoursInput.disabled = true;
+    lastHoursInput.disabled = true;
+    startButton.disabled = true;
+    resetButton.disabled = false;
+  } else {
+    fisrtDateInput.disabled = false;
+    lastDateInput.disabled = false;
+    firstHoursInput.disabled = false;
+    lastHoursInput.disabled = false;
+    startButton.disabled = true;
+    resetButton.disabled = true;
+  }
+};
+
+export default interfaceIsDisabled;
