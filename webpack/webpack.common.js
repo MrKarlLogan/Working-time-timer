@@ -1,5 +1,6 @@
 const HTMLWebpackPlugins = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack'); //подключаем webpack для использования встроенного плагина EnvironmentPlugin
 
@@ -86,6 +87,17 @@ module.exports = {
 			filename: 'static/styles/[name].[contenthash].css',
 		}),
 		//Плагин позволяет установить переменные окружения, можно переопределить переменную из блока script файла package.json
+		new CopyWebpackPlugin({
+			patterns: [
+				{
+					from: path.resolve(__dirname, '..', 'public'),
+					to: path.resolve(__dirname, '..', 'dist'),
+					globOptions: {
+						ignore: ['**/index.html'], // игнорируем HTML, так как его обрабатывает HTMLWebpackPlugin
+					},
+				},
+			],
+		}),
 		new webpack.EnvironmentPlugin({
 			NODE_ENV: 'development', // значение по умолчанию 'development', если переменная process.env.NODE_ENV не передана при вызове сборки
 		}),
