@@ -104,7 +104,6 @@ export const startProgressTimer = ({
 	const currentHours = new Date().getHours();
 	const currentMinutes = new Date().getMinutes();
 	const diffDays = Math.max(0, timeUtils.daysUntilStart(fisrtDateInput.value));
-	console.log(diffDays);
 	let totalWaitTime = 0;
 
 	const startProgressInterval = (isValid: boolean) => {
