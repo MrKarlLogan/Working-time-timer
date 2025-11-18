@@ -59,7 +59,6 @@ const utilsTimer = {
 			currentHours <= Number(lastHoursInput.value)
 		) {
 			appState.minutesWorked += 1;
-			console.log(appState.minutesWorked);
 			updateProgressValue({
 				appState,
 				workedTimeMinutes,
