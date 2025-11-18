@@ -1,6 +1,12 @@
+export type appStateType = {
+	minutesWorked: number;
+	progressTimer: NodeJS.Timeout | null;
+	syncTimeout: NodeJS.Timeout | null;
+};
+
 export type interfaceIsDisabledType = {
 	isBlock: boolean;
-	fisrtDateInput: HTMLInputElement;
+	firstDateInput: HTMLInputElement;
 	lastDateInput: HTMLInputElement;
 	firstHoursInput: HTMLInputElement;
 	lastHoursInput: HTMLInputElement;
@@ -14,7 +20,7 @@ export type updateDateType = {
 };
 
 export type validateDateType = {
-	fisrtDateInput: HTMLInputElement;
+	firstDateInput: HTMLInputElement;
 	lastDateInput: HTMLInputElement;
 	firstLocalDate?: string | null;
 	lastLocalDate?: string | null;

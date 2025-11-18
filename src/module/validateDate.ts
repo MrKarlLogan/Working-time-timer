@@ -1,7 +1,7 @@
 import { validateDateType } from '../types/interface';
 
 const validateDate = ({
-	fisrtDateInput,
+	firstDateInput,
 	lastDateInput,
 	firstLocalDate = null,
 	lastLocalDate = null,
@@ -11,7 +11,7 @@ const validateDate = ({
 	lastLocalHours = null,
 }: validateDateType) => {
 	const currentDate = new Date().toISOString().split('T')[0];
-	let firstDate = firstLocalDate || fisrtDateInput.value || currentDate;
+	let firstDate = firstLocalDate || firstDateInput.value || currentDate;
 	let lastDate = lastLocalDate || lastDateInput.value;
 
 	const currentHours = new Date().getHours();

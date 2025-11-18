@@ -7,26 +7,25 @@ import {
 } from '../types/timer';
 import { timeUtils } from './diffValue';
 
-const clearProgressTimer = ({
-	progressTimer,
-	syncTimeout,
-}: clearProgressTimerType) => {
+const clearProgressTimer = ({ appState }: clearProgressTimerType) => {
+	const { progressTimer, syncTimeout } = appState;
 	if (progressTimer) {
 		clearInterval(progressTimer);
-		progressTimer = null;
+		appState.progressTimer = null;
 	}
 	if (syncTimeout) {
 		clearTimeout(syncTimeout);
-		syncTimeout = null;
+		appState.syncTimeout = null;
 	}
 };
 
 const updateProgressValue = ({
-	minutesWorked,
+	appState,
 	workedTimeMinutes,
 	progress,
 	startButton,
 }: updateProgressValueType) => {
+	const { minutesWorked } = appState;
 	const result = (minutesWorked / workedTimeMinutes) * 100;
 	progress.value = result;
 	startButton.textContent = `${result.toFixed(2)}%`;
@@ -34,21 +33,19 @@ const updateProgressValue = ({
 
 const utilsTimer = {
 	updateProgress: ({
-		minutesWorked,
+		appState,
 		workedTimeMinutes,
 		progress,
 		startButton,
 		firstHoursInput,
 		lastHoursInput,
-		progressTimer,
-		syncTimeout,
 		shouldIncrement,
 	}: updateProgressType) => {
 		const currentHours = new Date().getHours();
 
 		if (!shouldIncrement) {
 			updateProgressValue({
-				minutesWorked,
+				appState,
 				workedTimeMinutes,
 				progress,
 				startButton,
@@ -57,21 +54,22 @@ const utilsTimer = {
 		}
 
 		if (
-			minutesWorked !== workedTimeMinutes &&
+			appState.minutesWorked !== workedTimeMinutes &&
 			currentHours >= Number(firstHoursInput.value) &&
 			currentHours <= Number(lastHoursInput.value)
 		) {
-			minutesWorked++;
+			appState.minutesWorked += 1;
+			console.log(appState.minutesWorked);
 			updateProgressValue({
-				minutesWorked,
+				appState,
 				workedTimeMinutes,
 				progress,
 				startButton,
 			});
 		}
 
-		if (minutesWorked >= workedTimeMinutes) {
-			clearProgressTimer({ progressTimer, syncTimeout });
+		if (appState.minutesWorked >= workedTimeMinutes) {
+			clearProgressTimer({ appState });
 			return;
 		}
 	},
@@ -81,20 +79,18 @@ const utilsTimer = {
 export const startProgressTimer = ({
 	workedTimeMinutes,
 	passedMinutes,
-	progressTimer,
-	syncTimeout,
-	minutesWorked,
+	appState,
 	progress,
 	startButton,
 	firstHoursInput,
 	lastHoursInput,
-	fisrtDateInput,
+	firstDateInput,
 }: startProgressTimerType) => {
-	clearProgressTimer({ progressTimer, syncTimeout });
+	clearProgressTimer({ appState });
 
-	if (passedMinutes > 0) minutesWorked = passedMinutes;
+	if (passedMinutes > 0) appState.minutesWorked = passedMinutes;
 	updateProgressValue({
-		minutesWorked,
+		appState,
 		workedTimeMinutes,
 		progress,
 		startButton,
@@ -103,31 +99,27 @@ export const startProgressTimer = ({
 	const startHour = Number(firstHoursInput.value);
 	const currentHours = new Date().getHours();
 	const currentMinutes = new Date().getMinutes();
-	const diffDays = Math.max(0, timeUtils.daysUntilStart(fisrtDateInput.value));
+	const diffDays = Math.max(0, timeUtils.daysUntilStart(firstDateInput.value));
 	let totalWaitTime = 0;
 
 	const startProgressInterval = (isValid: boolean) => {
 		utilsTimer.updateProgress({
-			minutesWorked,
+			appState,
 			workedTimeMinutes,
 			progress,
 			startButton,
 			firstHoursInput,
 			lastHoursInput,
-			progressTimer,
-			syncTimeout,
 			shouldIncrement: isValid,
 		});
-		progressTimer = setInterval(() => {
+		appState.progressTimer = setInterval(() => {
 			utilsTimer.updateProgress({
-				minutesWorked,
+				appState,
 				workedTimeMinutes,
 				progress,
 				startButton,
 				firstHoursInput,
 				lastHoursInput,
-				progressTimer,
-				syncTimeout,
 				shouldIncrement: true,
 			});
 		}, 60000);
@@ -138,7 +130,7 @@ export const startProgressTimer = ({
 		const minutesUntilStart = hoursUntilStart * 60 - currentMinutes;
 		const currentSecond =
 			minutesUntilStart * 60 * 1000 + utilsTimer.currentSecond() - 60000;
-		syncTimeout = setTimeout(() => {
+		appState.syncTimeout = setTimeout(() => {
 			startProgressInterval(false);
 		}, currentSecond);
 	} else if (
@@ -147,7 +139,7 @@ export const startProgressTimer = ({
 		currentHours <= Number(lastHoursInput.value)
 	) {
 		const currentSecond = utilsTimer.currentSecond();
-		syncTimeout = setTimeout(() => {
+		appState.syncTimeout = setTimeout(() => {
 			startProgressInterval(true);
 		}, currentSecond);
 	} else {
@@ -167,21 +159,19 @@ export const startProgressTimer = ({
 
 		totalWaitTime += startHour * 60 * 60 * 1000;
 
-		syncTimeout = setTimeout(() => {
+		appState.syncTimeout = setTimeout(() => {
 			startProgressInterval(false);
 		}, totalWaitTime);
 	}
 };
 
 export const stopProgressTimer = ({
-	progressTimer,
-	syncTimeout,
-	minutesWorked,
+	appState,
 	progress,
 	startButton,
 }: stopProgressTimerType) => {
-	clearProgressTimer({ progressTimer, syncTimeout });
-	minutesWorked = 0;
+	clearProgressTimer({ appState });
+	appState.minutesWorked = 0;
 	progress.value = 0;
 	startButton.textContent = 'Start a work shift';
 };

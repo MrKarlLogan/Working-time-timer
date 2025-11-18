@@ -2,7 +2,7 @@ import { interfaceIsDisabledType } from '../types/interface';
 
 const interfaceIsDisabled = ({
 	isBlock,
-	fisrtDateInput,
+	firstDateInput,
 	lastDateInput,
 	firstHoursInput,
 	lastHoursInput,
@@ -10,14 +10,14 @@ const interfaceIsDisabled = ({
 	resetButton,
 }: interfaceIsDisabledType) => {
 	if (isBlock) {
-		fisrtDateInput.disabled = true;
+		firstDateInput.disabled = true;
 		lastDateInput.disabled = true;
 		firstHoursInput.disabled = true;
 		lastHoursInput.disabled = true;
 		startButton.disabled = true;
 		resetButton.disabled = false;
 	} else {
-		fisrtDateInput.disabled = false;
+		firstDateInput.disabled = false;
 		lastDateInput.disabled = false;
 		firstHoursInput.disabled = false;
 		lastHoursInput.disabled = false;

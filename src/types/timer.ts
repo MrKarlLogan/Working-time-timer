@@ -1,50 +1,45 @@
+import { appStateType } from './interface';
+
 export type clearProgressTimerType = {
-	progressTimer: NodeJS.Timeout | null;
-	syncTimeout: NodeJS.Timeout | null;
+	appState: Pick<appStateType, 'progressTimer' | 'syncTimeout'>;
 };
 
 export type updateProgressValueType = {
-	minutesWorked: number;
+	appState: Pick<appStateType, 'minutesWorked'>;
 	workedTimeMinutes: number;
 	progress: HTMLProgressElement;
 	startButton: HTMLButtonElement;
 };
 
 export type updateProgressType = {
-	minutesWorked: number;
+	appState: appStateType;
 	workedTimeMinutes: number;
 	progress: HTMLProgressElement;
 	startButton: HTMLButtonElement;
 	firstHoursInput: HTMLInputElement;
 	lastHoursInput: HTMLInputElement;
-	progressTimer: NodeJS.Timeout | null;
-	syncTimeout: NodeJS.Timeout | null;
 	shouldIncrement: boolean;
 };
 
 export type startProgressTimerType = {
 	workedTimeMinutes: number;
 	passedMinutes: number;
-	progressTimer: NodeJS.Timeout | null;
-	syncTimeout: NodeJS.Timeout | null;
-	minutesWorked: number;
+	appState: appStateType;
 	progress: HTMLProgressElement;
 	startButton: HTMLButtonElement;
 	firstHoursInput: HTMLInputElement;
 	lastHoursInput: HTMLInputElement;
-	fisrtDateInput: HTMLInputElement;
+	firstDateInput: HTMLInputElement;
 };
 
 export type stopProgressTimerType = {
-	progressTimer: NodeJS.Timeout | null;
-	syncTimeout: NodeJS.Timeout | null;
-	minutesWorked: number;
+	appState: appStateType;
 	progress: HTMLProgressElement;
 	startButton: HTMLButtonElement;
 };
 
 export type startTimerType = {
-	fisrtDateInput: HTMLInputElement;
+	firstDateInput: HTMLInputElement;
 	lastDateInput: HTMLInputElement;
 	dateToLocaleFirstDate?: string | null;
 	dateToLocaleLastDate?: string | null;
@@ -55,7 +50,7 @@ export type startTimerType = {
 };
 
 export type stopTimerType = {
-	fisrtDateInput: HTMLInputElement;
+	firstDateInput: HTMLInputElement;
 	lastDateInput: HTMLInputElement;
 	firstHoursInput: HTMLInputElement;
 	lastHoursInput: HTMLInputElement;

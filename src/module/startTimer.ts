@@ -2,7 +2,7 @@ import { startTimerType } from '../types/timer';
 import validateDate from './validateDate';
 
 const startTimer = ({
-	fisrtDateInput,
+	firstDateInput,
 	lastDateInput,
 	dateToLocaleFirstDate = null,
 	dateToLocaleLastDate = null,
@@ -12,7 +12,7 @@ const startTimer = ({
 	dateToLocaleLastHours = null,
 }: startTimerType) => {
 	const currentDate = new Date().toISOString().split('T')[0];
-	let firstDate = dateToLocaleFirstDate || fisrtDateInput.value || currentDate;
+	let firstDate = dateToLocaleFirstDate || firstDateInput.value || currentDate;
 	let lastDate = dateToLocaleLastDate || lastDateInput.value;
 
 	const currentHours = new Date().getHours();
@@ -21,7 +21,7 @@ const startTimer = ({
 	);
 	let lastHour = dateToLocaleLastHours || lastHoursInput.value;
 
-	if (!fisrtDateInput.value) fisrtDateInput.value = firstDate;
+	if (!firstDateInput.value) firstDateInput.value = firstDate;
 	if (!lastDateInput.value) lastDateInput.value = lastDate;
 
 	firstHoursInput.value = firstHour;
@@ -29,7 +29,7 @@ const startTimer = ({
 
 	if (
 		!validateDate({
-			fisrtDateInput,
+			firstDateInput,
 			lastDateInput,
 			firstLocalDate: firstDate,
 			lastLocalDate: lastDate,

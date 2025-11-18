@@ -1,12 +1,12 @@
 import { stopTimerType } from '../types/timer';
 
 const stopTimer = ({
-	fisrtDateInput,
+	firstDateInput,
 	lastDateInput,
 	firstHoursInput,
 	lastHoursInput,
 }: stopTimerType) => {
-	fisrtDateInput.value = '';
+	firstDateInput.value = '';
 	lastDateInput.value = '';
 	firstHoursInput.value = '0';
 	lastHoursInput.value = '0';

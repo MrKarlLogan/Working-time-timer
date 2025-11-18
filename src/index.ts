@@ -9,6 +9,7 @@ import stopTimer from './module/stopTimer';
 import updateDate from './module/updateDate';
 import validateDate from './module/validateDate';
 import './style.scss';
+import { appStateType } from './types/interface';
 
 const dateInput = document.querySelector(
 	'.current-time__box_date'
@@ -16,7 +17,7 @@ const dateInput = document.querySelector(
 const timeInput = document.querySelector(
 	'.current-time__box_time'
 ) as HTMLParagraphElement;
-const fisrtDateInput = document.querySelector(
+const firstDateInput = document.querySelector(
 	'.form__first-date'
 ) as HTMLInputElement;
 const lastDateInput = document.querySelector(
@@ -36,9 +37,13 @@ const resetButton = document.querySelector(
 ) as HTMLButtonElement;
 const progress = document.querySelector('.progress') as HTMLProgressElement;
 
-let minutesWorked = 0;
-let progressTimer: NodeJS.Timeout | null = null;
-let syncTimeout: NodeJS.Timeout | null = null;
+const appState: appStateType = {
+	minutesWorked: 0,
+	progressTimer: null,
+	syncTimeout: null,
+};
+
+let mainTimer: NodeJS.Timeout | null = null;
 
 const getDateToLocalStorage = () => {
 	const lastDateToLocalStorage = localStorage.getItem('localDate');
@@ -51,7 +56,7 @@ const getDateToLocalStorage = () => {
 		} = JSON.parse(lastDateToLocalStorage);
 
 		const currentValue = startTimer({
-			fisrtDateInput,
+			firstDateInput,
 			lastDateInput,
 			dateToLocaleFirstDate,
 			dateToLocaleLastDate,
@@ -71,19 +76,17 @@ const getDateToLocalStorage = () => {
 			startProgressTimer({
 				workedTimeMinutes: wordDaysDate.workedTimeMinutes,
 				passedMinutes: wordDaysDate.passedMinutes,
-				progressTimer,
-				syncTimeout,
-				minutesWorked,
+				appState,
 				progress,
 				startButton,
 				firstHoursInput,
 				lastHoursInput,
-				fisrtDateInput,
+				firstDateInput,
 			});
 		}
 		interfaceIsDisabled({
 			isBlock: true,
-			fisrtDateInput,
+			firstDateInput,
 			lastDateInput,
 			firstHoursInput,
 			lastHoursInput,
@@ -97,15 +100,13 @@ startButton.addEventListener('click', (e) => {
 	e.preventDefault();
 
 	stopProgressTimer({
-		progressTimer,
-		syncTimeout,
-		minutesWorked,
+		appState,
 		progress,
 		startButton,
 	});
 
 	const currentValue = startTimer({
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -121,19 +122,17 @@ startButton.addEventListener('click', (e) => {
 		startProgressTimer({
 			workedTimeMinutes: wordDaysDate.workedTimeMinutes,
 			passedMinutes: wordDaysDate.passedMinutes,
-			progressTimer,
-			syncTimeout,
-			minutesWorked,
+			appState,
 			progress,
 			startButton,
 			firstHoursInput,
 			lastHoursInput,
-			fisrtDateInput,
+			firstDateInput,
 		});
 	}
 	interfaceIsDisabled({
 		isBlock: true,
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -146,18 +145,16 @@ resetButton.addEventListener('click', (e) => {
 	e.preventDefault();
 
 	stopProgressTimer({
-		progressTimer,
-		syncTimeout,
-		minutesWorked,
+		appState,
 		progress,
 		startButton,
 	});
 
-	stopTimer({ fisrtDateInput, lastDateInput, firstHoursInput, lastHoursInput });
+	stopTimer({ firstDateInput, lastDateInput, firstHoursInput, lastHoursInput });
 
 	interfaceIsDisabled({
 		isBlock: false,
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -166,9 +163,9 @@ resetButton.addEventListener('click', (e) => {
 	});
 });
 
-fisrtDateInput.addEventListener('input', () => {
+firstDateInput.addEventListener('input', () => {
 	startButton.disabled = !validateDate({
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -177,7 +174,7 @@ fisrtDateInput.addEventListener('input', () => {
 
 lastDateInput.addEventListener('input', () => {
 	startButton.disabled = !validateDate({
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -186,7 +183,7 @@ lastDateInput.addEventListener('input', () => {
 
 firstHoursInput.addEventListener('input', () => {
 	startButton.disabled = !validateDate({
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -195,7 +192,7 @@ firstHoursInput.addEventListener('input', () => {
 
 lastHoursInput.addEventListener('input', () => {
 	startButton.disabled = !validateDate({
-		fisrtDateInput,
+		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
@@ -203,14 +200,15 @@ lastHoursInput.addEventListener('input', () => {
 });
 
 const initApp = () => {
-	minutesWorked = 0;
-	progressTimer = null;
-	syncTimeout = null;
+	appState.minutesWorked = 0;
+	appState.progressTimer = null;
+	appState.syncTimeout = null;
 	startButton.disabled = true;
 	resetButton.disabled = true;
 	updateDate({ dateInput, timeInput });
 	getDateToLocalStorage();
-	const mainTimer = setInterval(() => {
+	if (mainTimer) return;
+	mainTimer = setInterval(() => {
 		updateDate({ dateInput, timeInput });
 	}, 1000);
 };
