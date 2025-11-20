@@ -17,6 +17,7 @@ const dateInput = document.querySelector(
 const timeInput = document.querySelector(
 	'.current-time__box_time'
 ) as HTMLParagraphElement;
+const form = document.querySelector('.form') as HTMLFormElement;
 const firstDateInput = document.querySelector(
 	'.form__first-date'
 ) as HTMLInputElement;
@@ -24,10 +25,10 @@ const lastDateInput = document.querySelector(
 	'.form__last-date'
 ) as HTMLInputElement;
 const firstHoursInput = document.querySelector(
-	'.form__first-hour'
+	'.form__first-hour-input'
 ) as HTMLInputElement;
 const lastHoursInput = document.querySelector(
-	'.form__last-hour'
+	'.form__last-hour-input'
 ) as HTMLInputElement;
 const startButton = document.querySelector(
 	'.form__button-start'
@@ -36,6 +37,9 @@ const resetButton = document.querySelector(
 	'.current-time__button-reset'
 ) as HTMLButtonElement;
 const progress = document.querySelector('.progress') as HTMLProgressElement;
+const clearFormButton = document.querySelector(
+	'.clear-form'
+) as HTMLButtonElement;
 
 const appState: appStateType = {
 	minutesWorked: 0,
@@ -99,6 +103,8 @@ const getDateToLocalStorage = () => {
 startButton.addEventListener('click', (e) => {
 	e.preventDefault();
 
+	clearFormButton.classList.remove('open-clear-button');
+
 	stopProgressTimer({
 		appState,
 		progress,
@@ -130,6 +136,18 @@ startButton.addEventListener('click', (e) => {
 			firstDateInput,
 		});
 	}
+
+	const inputs = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput.closest('.form__first-hour'),
+		lastHoursInput.closest('.form__last-hour'),
+	];
+
+	inputs.forEach((input) =>
+		input?.classList.remove('open-before', 'valid', 'nonValid')
+	);
+
 	interfaceIsDisabled({
 		isBlock: true,
 		firstDateInput,
@@ -163,6 +181,61 @@ resetButton.addEventListener('click', (e) => {
 	});
 });
 
+form.addEventListener('input', () => {
+	const hasEmptyValue = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	].some((input) => !input.value);
+
+	const hasNonEmptyValue = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	].some((input) => input.value);
+
+	clearFormButton.classList.toggle('open-clear-button', hasNonEmptyValue);
+
+	const isValid =
+		!hasEmptyValue &&
+		validateDate({
+			firstDateInput,
+			lastDateInput,
+			firstHoursInput,
+			lastHoursInput,
+		});
+
+	const inputs = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	];
+
+	inputs.forEach((input) => {
+		if (input.value) {
+			input?.classList.toggle('valid', isValid);
+			input?.classList.toggle('nonValid', !isValid);
+		} else {
+			input.classList.remove('valid', 'nonValid');
+		}
+
+		if (input === firstHoursInput || input === lastHoursInput) {
+			const hourContainer = input.closest(
+				input === firstHoursInput ? '.form__first-hour' : '.form__last-hour'
+			);
+			if (input.value) {
+				hourContainer?.classList.toggle('valid', isValid);
+				hourContainer?.classList.toggle('nonValid', !isValid);
+			} else {
+				hourContainer?.classList.remove('valid', 'nonValid');
+			}
+		}
+	});
+});
+
 firstDateInput.addEventListener('input', () => {
 	startButton.disabled = !validateDate({
 		firstDateInput,
@@ -170,6 +243,10 @@ firstDateInput.addEventListener('input', () => {
 		firstHoursInput,
 		lastHoursInput,
 	});
+});
+
+firstDateInput.addEventListener('change', () => {
+	firstDateInput.classList.toggle('open-before', !!firstDateInput.value);
 });
 
 lastDateInput.addEventListener('input', () => {
@@ -181,7 +258,40 @@ lastDateInput.addEventListener('input', () => {
 	});
 });
 
+lastDateInput.addEventListener('change', () => {
+	lastDateInput.classList.toggle('open-before', !!lastDateInput.value);
+});
+
+const validateNumberInput = (input: HTMLInputElement) => {
+	if (input.value === '') return;
+
+	if (input.value.length === 2 && input.value[0] === '0') {
+		input.value = input.value[1];
+	}
+
+	if (input.value.includes('.') || input.value.includes(',')) {
+		const value = Number(input.value.replace(',', '.'));
+		input.value = Math.round(value).toString();
+	}
+
+	const value = Number(input.value);
+
+	if (value < 0 || value > 24) {
+		input.value = value < 0 ? '0' : '24';
+	}
+};
+
+const setupNumberInputValid = (input: HTMLInputElement) => {
+	input.addEventListener('keydown', (e: KeyboardEvent) => {
+		if (e.key === '+' || e.key === '-' || e.key === 'e' || e.key === 'E') {
+			e.preventDefault();
+		}
+	});
+};
+
 firstHoursInput.addEventListener('input', () => {
+	validateNumberInput(firstHoursInput);
+
 	startButton.disabled = !validateDate({
 		firstDateInput,
 		lastDateInput,
@@ -190,21 +300,60 @@ firstHoursInput.addEventListener('input', () => {
 	});
 });
 
+firstHoursInput.addEventListener('change', () => {
+	firstHoursInput
+		.closest('.form__first-hour')
+		?.classList.toggle('open-before', !!firstHoursInput.value);
+});
+
+setupNumberInputValid(firstHoursInput);
+
 lastHoursInput.addEventListener('input', () => {
+	validateNumberInput(lastHoursInput);
+
 	startButton.disabled = !validateDate({
 		firstDateInput,
 		lastDateInput,
 		firstHoursInput,
 		lastHoursInput,
 	});
+});
+
+lastHoursInput.addEventListener('change', () => {
+	lastHoursInput
+		.closest('.form__last-hour')
+		?.classList.toggle('open-before', !!lastHoursInput.value);
+});
+
+setupNumberInputValid(lastHoursInput);
+
+clearFormButton.addEventListener('click', () => {
+	const inputs = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	];
+
+	inputs.forEach((input) => {
+		input.value = '';
+		input.classList.remove('valid', 'nonValid', 'open-before');
+
+		if (input === firstHoursInput || input === lastHoursInput) {
+			const hourContainer = input.closest(
+				input === firstHoursInput ? '.form__first-hour' : '.form__last-hour'
+			);
+			hourContainer?.classList.remove('valid', 'nonValid', 'open-before');
+		}
+	});
+
+	clearFormButton.classList.remove('open-clear-button');
 });
 
 const initApp = () => {
 	appState.minutesWorked = 0;
-	appState.progressTimer = null;
-	appState.syncTimeout = null;
-	startButton.disabled = true;
-	resetButton.disabled = true;
+	appState.progressTimer = appState.syncTimeout = null;
+	startButton.disabled = resetButton.disabled = true;
 	updateDate({ dateInput, timeInput });
 	getDateToLocalStorage();
 	if (mainTimer) return;

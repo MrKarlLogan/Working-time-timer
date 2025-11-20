@@ -1,0 +1,20 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.section__current-time {
+	background-color: lightgrey;
+	border-radius: $border-radius * 1.5;
+	@include grid(2, 1, 1rem);
+	padding: 2rem;
+	transition: 0.2s;
+	position: relative;
+
+	&:hover {
+		box-shadow: 0 0 10px 5px grey;
+	}
+
+	@media (max-width: 800px) {
+		inline-size: 100%;
+		@include flex(column, center, stretch, 1rem);
+	}
+}

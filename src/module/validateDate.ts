@@ -30,7 +30,7 @@ const validateDate = ({
 
 	if (!lastDate || !lastHour) return false;
 
-	if (firstDate > lastDate) return false;
+	if (firstDate > lastDate || lastDate < currentDate) return false;
 
 	if (Number(firstHour) >= Number(lastHour)) return false;
 

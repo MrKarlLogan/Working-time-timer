@@ -1,0 +1,258 @@
+@use '../abstracts/fonts' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.form {
+	@include grid(4, 3);
+	grid-template-columns: auto auto repeat(2, calc(100px - 0.5rem));
+
+	&__first-hour,
+	&__last-hour {
+		@include flex;
+		position: relative;
+		border-radius: $border-radius;
+		cursor: pointer;
+		overflow: hidden;
+		font: {
+			family: $font-family;
+			size: 1rem;
+		}
+
+		&:has(.form__first-hour-input:disabled, .form__last-hour-input:disabled) {
+			color: grey;
+			cursor: default;
+		}
+
+		&:hover:not(
+				:has(.form__first-hour-input:disabled, .form__last-hour-input:disabled)
+			) {
+			box-shadow: 0 0 5px 2px grey;
+		}
+
+		&:has(.form__first-hour-input:focus, .form__last-hour-input:focus) {
+			box-shadow: 0 0 5px 2px grey;
+		}
+
+		@media (max-width: 800px) {
+			&:active::before {
+				@include open-before-main(15%);
+			}
+
+			&:has(.form__first-hour-input, .form__last-hour-input):active {
+				box-shadow: 0 0 5px 2px grey;
+			}
+		}
+	}
+
+	&__first-date,
+	&__last-date,
+	&__button-start {
+		text-align: center;
+		border-radius: $border-radius;
+		border: none;
+		padding: 0.5rem;
+		color: grey;
+		cursor: pointer;
+		font: {
+			family: $font-family;
+			size: 1rem;
+		}
+		transition: 0.2s;
+
+		&:disabled {
+			color: grey;
+			cursor: default;
+		}
+
+		&:hover:not(:disabled),
+		&:focus:not(:disabled) {
+			box-shadow: 0 0 5px 2px grey;
+		}
+	}
+
+	&__first-hour-input,
+	&__last-hour-input {
+		inline-size: 100%;
+		block-size: 100%;
+		text-align: center;
+		border-radius: $border-radius;
+		border: none;
+		padding: 0.5rem;
+		color: grey;
+		@include flex();
+		font: {
+			family: $font-family;
+			size: 1rem;
+		}
+		transition: 0.2s;
+	}
+
+	&__first-date {
+		@include grid-template('1/3', '1');
+		position: relative;
+
+		&::before {
+			@include before('Start date');
+		}
+
+		&:hover::before,
+		&:disabled::before,
+		&:focus::before {
+			@include open-before-main(10%);
+		}
+
+		@media (max-width: 800px) {
+			&:active::before {
+				@include open-before-main(10%);
+			}
+
+			&:active:not(:disabled) {
+				box-shadow: 0 0 5px 2px grey;
+			}
+		}
+	}
+
+	&__last-date {
+		@include grid-template('1/3', '2');
+		position: relative;
+
+		&::before {
+			@include before('End date');
+		}
+
+		&:hover::before,
+		&:disabled::before,
+		&:focus::before {
+			@include open-before-main(10%);
+		}
+
+		@media (max-width: 800px) {
+			&:active::before {
+				@include open-before-main(10%);
+			}
+
+			&:active:not(:disabled) {
+				box-shadow: 0 0 5px 2px grey;
+			}
+		}
+	}
+
+	&__first-hour {
+		@include grid-template('1', '3');
+		position: relative;
+
+		&-input {
+			position: relative;
+		}
+
+		&::before {
+			@include before('From');
+			z-index: 1;
+		}
+
+		&:has(
+				.form__first-hour-input:disabled,
+				.form__first-hour-input:focus
+			)::before,
+		&:hover::before {
+			@include open-before-main(15%);
+		}
+
+		&:focus-visible {
+			outline: none;
+		}
+	}
+
+	&__last-hour {
+		@include grid-template('2', '3');
+
+		&-input {
+			position: relative;
+		}
+
+		&::before {
+			@include before('To');
+			z-index: 1;
+		}
+
+		&:has(
+				.form__last-hour-input:disabled,
+				.form__last-hour-input:focus
+			)::before,
+		&:hover::before {
+			@include open-before-main(15%);
+		}
+
+		&:focus-visible {
+			outline: none;
+		}
+	}
+
+	:is(
+		&__first-date,
+		&__last-date,
+		&__first-hour-input,
+		&__last-hour-input
+	):focus {
+		outline: none;
+	}
+
+	:is(&__first-date, &__last-date).open-before {
+		@include open-before(10%);
+	}
+
+	:is(&__first-hour, &__last-hour).open-before {
+		@include open-before(15%);
+	}
+
+	:is(
+			.form__first-date,
+			.form__last-date,
+			.form__first-hour,
+			.form__last-hour
+		).valid::before {
+		background-color: $color-valid;
+	}
+
+	:is(
+			.form__first-date,
+			.form__last-date,
+			.form__first-hour,
+			.form__last-hour
+		).nonValid::before {
+		background-color: $color-nonValid;
+	}
+
+	&__button-start {
+		@include grid-template('3/5', '1/-1');
+		color: white;
+		background-color: DarkGray;
+		transition: 0.2s;
+		font: {
+			family: $font-family;
+			size: 1rem;
+		}
+
+		&:not(:disabled) {
+			&:hover {
+				filter: brightness(1.1);
+			}
+
+			&:focus {
+				outline: none;
+				box-shadow: 0 0 5px 2px grey;
+			}
+
+			&:active {
+				box-shadow: inset 0 0 5px 1px grey;
+				font: {
+					size: calc(1rem - 10%);
+				}
+			}
+		}
+
+		&:focus-visible {
+			outline: none;
+		}
+	}
+}

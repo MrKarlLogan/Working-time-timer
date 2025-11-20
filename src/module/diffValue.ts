@@ -44,11 +44,12 @@ const diffValue = ({
 	firstHour,
 	lastHour,
 }: diffValueType) => {
-	const currentDate = new Date().getDate();
+	const currentDate = new Date().toISOString().split('T')[0];
 	const currentHour = new Date().getHours();
 	const currentMinutes = new Date().getMinutes();
 
-	const startDate = new Date(firstDate).getDate();
+	const startDate = new Date(firstDate).toISOString().split('T')[0];
+	const endDate = new Date(lastDate).toISOString().split('T')[0];
 	const startHour = Number(firstHour);
 
 	const diffDays = timeUtils.diffDays(lastDate, firstDate);
@@ -57,23 +58,31 @@ const diffValue = ({
 
 	let passedMinutes = 0;
 
+	if (currentDate < startDate) {
+		passedMinutes = 0;
+	}
+
+	if (currentDate > endDate) {
+		passedMinutes = workedTimeMinutes;
+	}
+
 	if (currentDate === startDate) {
 		if (currentHour > startHour) {
-			passedMinutes += timeUtils.passedMinutes(
+			passedMinutes = timeUtils.passedMinutes(
 				startHour,
 				lastHour,
 				currentHour,
 				currentMinutes
 			);
 		} else if (currentHour === startHour) {
-			passedMinutes += currentMinutes;
+			passedMinutes = currentMinutes;
 		}
 	}
 
-	if (currentDate > startDate) {
+	if (currentDate > startDate && currentDate <= endDate) {
 		const daysPassed = timeUtils.daysPassed(firstDate);
 
-		passedMinutes +=
+		passedMinutes =
 			daysPassed * workedMinutes +
 			timeUtils.passedMinutes(startHour, lastHour, currentHour, currentMinutes);
 	}

@@ -1,0 +1,33 @@
+@use '../abstracts/fonts' as *;
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+.clear-form {
+	inline-size: 100px;
+	appearance: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 0.2rem 1rem;
+	border: none;
+	border-radius: $border-radius 0;
+	background-color: $color-nonValid;
+	color: white;
+	cursor: pointer;
+	font: {
+		family: $font-family;
+		size: 0.8rem;
+	}
+	transition: 0.2s;
+	visibility: hidden;
+	opacity: 0;
+
+	&:hover {
+		inline-size: 130px;
+	}
+}
+
+.open-clear-button {
+	visibility: visible;
+	opacity: 1;
+}

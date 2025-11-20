@@ -170,7 +170,6 @@ export const stopProgressTimer = ({
 	startButton,
 }: stopProgressTimerType) => {
 	clearProgressTimer({ appState });
-	appState.minutesWorked = 0;
-	progress.value = 0;
+	appState.minutesWorked = progress.value = 0;
 	startButton.textContent = 'Start a work shift';
 };

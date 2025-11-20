@@ -9,21 +9,16 @@ const interfaceIsDisabled = ({
 	startButton,
 	resetButton,
 }: interfaceIsDisabledType) => {
-	if (isBlock) {
-		firstDateInput.disabled = true;
-		lastDateInput.disabled = true;
-		firstHoursInput.disabled = true;
-		lastHoursInput.disabled = true;
-		startButton.disabled = true;
-		resetButton.disabled = false;
-	} else {
-		firstDateInput.disabled = false;
-		lastDateInput.disabled = false;
-		firstHoursInput.disabled = false;
-		lastHoursInput.disabled = false;
-		startButton.disabled = true;
-		resetButton.disabled = true;
-	}
+	const inputs = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	];
+
+	inputs.forEach((input) => (input.disabled = isBlock));
+	startButton.disabled = true;
+	resetButton.disabled = !isBlock;
 };
 
 export default interfaceIsDisabled;

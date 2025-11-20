@@ -6,10 +6,12 @@ const stopTimer = ({
 	firstHoursInput,
 	lastHoursInput,
 }: stopTimerType) => {
-	firstDateInput.value = '';
-	lastDateInput.value = '';
-	firstHoursInput.value = '0';
-	lastHoursInput.value = '0';
+	const input = [
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	].forEach((input) => (input.value = ''));
 
 	if (localStorage.getItem('localDate')) localStorage.removeItem('localDate');
 };

@@ -22,8 +22,12 @@
       <form class="form" name="work-shift">
         <input class="form__first-date" type="date" name="first-date" />
         <input class="form__last-date" type="date" name="last-date" />
-        <input class="form__first-hour" type="number" name="first-hour" min="0" max="24" value="0" />
-        <input class="form__last-hour" type="number" name="last-hour" min="0" max="24" value="0" />
+        <div class="form__first-hour">
+          <input class="form__first-hour-input" type="number" name="first-hour" min="0" max="24" placeholder="From" />
+        </div>
+        <div class="form__last-hour">
+          <input class="form__last-hour-input" placeholder="To" type="number" name="last-hour" min="0" max="24" />
+        </div>
         <button class="form__button-start">Start a work shift</button>
       </form>
       <article class="current-time">
@@ -33,6 +37,7 @@
           <p class="current-time__box_time">Loading...</p>
         </div>
       </article>
+      <button class="clear-form">Clear form</button>
       <progress class="progress" value="0" max="100" />
     </article>
   </main>
