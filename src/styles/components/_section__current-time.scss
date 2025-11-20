@@ -2,10 +2,11 @@
 @use '../abstracts/variables' as *;
 
 .section__current-time {
+	inline-size: clamp(800px, 50%, 1000px);
 	background-color: lightgrey;
 	border-radius: $border-radius * 1.5;
 	@include grid(2, 1, 1rem);
-	padding: 2rem;
+	padding: 1.5rem;
 	transition: 0.2s;
 	position: relative;
 
@@ -16,5 +17,10 @@
 	@media (max-width: 800px) {
 		inline-size: 100%;
 		@include flex(column, center, stretch, 1rem);
+		padding: 2rem 0.5rem 0.5rem;
+
+		&:hover {
+			box-shadow: none;
+		}
 	}
 }

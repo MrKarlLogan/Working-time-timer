@@ -10,10 +10,11 @@
 @use './styles/components/progress' as *;
 @use './styles/layout/main' as *;
 
-
 body {
 	inline-size: 100%;
-	min-inline-size: 500px;
+	min-inline-size: 400px;
 	block-size: 100dvh;
 	@include flex(column);
+	background: linear-gradient(grey, lightgrey);
+	background-attachment: fixed;
 }

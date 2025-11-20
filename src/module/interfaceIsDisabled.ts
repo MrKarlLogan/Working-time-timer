@@ -17,6 +17,7 @@ const interfaceIsDisabled = ({
 	];
 
 	inputs.forEach((input) => (input.disabled = isBlock));
+
 	startButton.disabled = true;
 	resetButton.disabled = !isBlock;
 };

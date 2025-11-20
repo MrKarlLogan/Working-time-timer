@@ -24,6 +24,12 @@ const firstDateInput = document.querySelector(
 const lastDateInput = document.querySelector(
 	'.form__last-date'
 ) as HTMLInputElement;
+const firstHoursBefore = document.querySelector(
+	'.form__first-hour'
+) as HTMLDivElement;
+const lastHoursBefore = document.querySelector(
+	'.form__last-hour'
+) as HTMLDivElement;
 const firstHoursInput = document.querySelector(
 	'.form__first-hour-input'
 ) as HTMLInputElement;
@@ -300,6 +306,10 @@ firstHoursInput.addEventListener('input', () => {
 	});
 });
 
+firstHoursBefore.addEventListener('click', () => {
+	firstHoursInput.focus();
+});
+
 firstHoursInput.addEventListener('change', () => {
 	firstHoursInput
 		.closest('.form__first-hour')
@@ -317,6 +327,10 @@ lastHoursInput.addEventListener('input', () => {
 		firstHoursInput,
 		lastHoursInput,
 	});
+});
+
+lastHoursBefore.addEventListener('click', () => {
+	lastHoursInput.focus();
 });
 
 lastHoursInput.addEventListener('change', () => {

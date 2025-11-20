@@ -4,7 +4,6 @@
 .header {
 	inline-size: 100%;
 	padding: 1rem;
-	background-color: grey;
 	@include flex;
 
 	&__title {

@@ -4,7 +4,6 @@
 .main {
 	inline-size: 100%;
 	flex-grow: 1;
-	background: linear-gradient(grey, lightgrey);
 	padding: 1rem;
 	@include flex(column, start);
 }
