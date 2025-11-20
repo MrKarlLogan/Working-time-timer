@@ -222,6 +222,26 @@
 		background-color: $color-nonValid;
 	}
 
+	:is(
+		.form__first-date,
+		.form__last-date,
+		.form__first-hour-input,
+		.form__last-hour-input
+	):disabled {
+		background-color: rgb(225, 225, 225);
+	}
+
+	@media (max-width: 800px) {
+		:is(
+			.form__first-date,
+			.form__last-date,
+			.form__first-hour-input,
+			.form__last-hour-input
+		) {
+			background-color: white;
+		}
+	}
+
 	&__button-start {
 		@include grid-template('3/5', '1/-1');
 		color: white;
