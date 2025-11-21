@@ -17,7 +17,7 @@ const startTimer = ({
 
 	const currentHours = new Date().getHours();
 	let firstHour = String(
-		dateToLocaleFirstHours || firstHoursInput.value || currentHours
+		dateToLocaleFirstHours || firstHoursInput.value || '0'
 	);
 	let lastHour = dateToLocaleLastHours || lastHoursInput.value;
 

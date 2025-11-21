@@ -39,10 +39,12 @@
 	&::before {
 		content: '';
 		inline-size: $width;
+		border-radius: $border-radius 0 0 $border-radius;
 	}
 }
 
 @mixin open-before-main($width) {
 	content: '';
 	inline-size: $width;
+	border-radius: $border-radius 0 0 $border-radius;
 }

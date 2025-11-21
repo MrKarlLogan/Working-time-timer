@@ -95,11 +95,13 @@
 		&:disabled::before,
 		&:focus::before {
 			@include open-before-main(10%);
+			border-radius: $border-radius 0 0 $border-radius;
 		}
 
 		@media (max-width: 800px) {
 			&:active::before {
 				@include open-before-main(10%);
+				border-radius: $border-radius 0 0 $border-radius;
 			}
 
 			&:active:not(:disabled) {
@@ -121,11 +123,13 @@
 		&:disabled::before,
 		&:focus::before {
 			@include open-before-main(10%);
+			border-radius: $border-radius 0 0 $border-radius;
 		}
 
 		@media (max-width: 800px) {
 			&:active::before {
 				@include open-before-main(10%);
+				border-radius: $border-radius 0 0 $border-radius;
 			}
 
 			&:active:not(:disabled) {
@@ -149,6 +153,7 @@
 			)::before,
 		&:hover::before {
 			@include open-before-main(15%);
+			border-radius: $border-radius 0 0 $border-radius;
 		}
 
 		&:focus-visible {
@@ -180,6 +185,7 @@
 			)::before,
 		&:hover::before {
 			@include open-before-main(15%);
+			border-radius: $border-radius 0 0 $border-radius;
 		}
 
 		&:focus-visible {

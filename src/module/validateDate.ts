@@ -15,9 +15,7 @@ const validateDate = ({
 	let lastDate = lastLocalDate || lastDateInput.value;
 
 	const currentHours = new Date().getHours();
-	let firstHour = String(
-		firstLocalHours || firstHoursInput.value || currentHours
-	);
+	let firstHour = String(firstLocalHours || firstHoursInput.value || '0');
 	let lastHour = lastLocalHours || lastHoursInput.value;
 
 	if (
@@ -34,7 +32,7 @@ const validateDate = ({
 
 	if (Number(firstHour) >= Number(lastHour)) return false;
 
-	if (firstDate === lastDate || currentDate === lastDate) {
+	if (currentDate === lastDate) {
 		if (Number(lastHour) <= currentHours) return false;
 	}
 

@@ -188,13 +188,6 @@ resetButton.addEventListener('click', (e) => {
 });
 
 form.addEventListener('input', () => {
-	const hasEmptyValue = [
-		firstDateInput,
-		lastDateInput,
-		firstHoursInput,
-		lastHoursInput,
-	].some((input) => !input.value);
-
 	const hasNonEmptyValue = [
 		firstDateInput,
 		lastDateInput,
@@ -204,14 +197,12 @@ form.addEventListener('input', () => {
 
 	clearFormButton.classList.toggle('open-clear-button', hasNonEmptyValue);
 
-	const isValid =
-		!hasEmptyValue &&
-		validateDate({
-			firstDateInput,
-			lastDateInput,
-			firstHoursInput,
-			lastHoursInput,
-		});
+	const isValid = validateDate({
+		firstDateInput,
+		lastDateInput,
+		firstHoursInput,
+		lastHoursInput,
+	});
 
 	const inputs = [
 		firstDateInput,
