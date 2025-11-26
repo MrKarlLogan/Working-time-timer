@@ -56,7 +56,7 @@ const utilsTimer = {
 		if (
 			appState.minutesWorked !== workedTimeMinutes &&
 			currentHours >= Number(firstHoursInput.value) &&
-			currentHours <= Number(lastHoursInput.value)
+			currentHours < Number(lastHoursInput.value)
 		) {
 			appState.minutesWorked += 1;
 			updateProgressValue({
@@ -135,7 +135,7 @@ export const startProgressTimer = ({
 	} else if (
 		diffDays === 0 &&
 		currentHours >= startHour &&
-		currentHours <= Number(lastHoursInput.value)
+		currentHours < Number(lastHoursInput.value)
 	) {
 		const currentSecond = utilsTimer.currentSecond();
 		appState.syncTimeout = setTimeout(() => {
